@@ -1,0 +1,136 @@
+
+<style>
+  .wrap { display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem 2.5rem; gap: 1.5rem; }
+  .phase-label { font-size: 22px; font-weight: 500; color: var(--color-text-primary); text-align: center; min-height: 2rem; }
+  .count-label { font-size: 48px; font-weight: 500; color: #534AB7; text-align: center; line-height: 1; min-height: 3.5rem; }
+  .scene { position: relative; width: 220px; height: 220px; }
+  .box-border {
+    position: absolute; inset: 0;
+    border: 2.5px solid #534AB7;
+    border-radius: 12px;
+    box-sizing: border-box;
+  }
+  .dot { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #534AB7; transform: translate(-50%, -50%); }
+  .corner-label { position: absolute; font-size: 11px; color: #534AB7; font-family: var(--font-sans); font-weight: 500; }
+  .progress-bar { width: 220px; height: 4px; background: #CECBF6; border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #534AB7; border-radius: 2px; }
+  .btn { background: transparent; border: 2px solid #534AB7; border-radius: 8px; padding: 10px 36px; font-size: 15px; color: #534AB7; cursor: pointer; font-family: var(--font-sans); font-weight: 500; }
+  .btn:hover { background: #EEEDFE; }
+  .desc { font-size: 14px; color: var(--color-text-secondary); text-align: center; max-width: 300px; line-height: 1.6; }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Box breathing: 4-4-4-4 breathing technique for anxiety</h2>
+
+  <div class="phase-label" id="phaseLabel">Press start</div>
+  <div class="count-label" id="countLabel">—</div>
+
+  <div class="scene" id="scene">
+    <div class="box-border"></div>
+    <span class="corner-label" style="top:6px;left:10px">↑ inhale</span>
+    <span class="corner-label" style="top:6px;right:10px">hold</span>
+    <span class="corner-label" style="bottom:6px;left:10px">↓ exhale</span>
+    <span class="corner-label" style="bottom:6px;right:10px">hold</span>
+    <div class="dot" id="dot"></div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <button class="btn" id="toggleBtn" onclick="toggleBreath()">Start</button>
+
+  <p class="desc">Inhale 4 – hold 4 – exhale 4 – hold 4.<br>Also known as <em>box breathing</em>.</p>
+</div>
+
+<script>
+const SQ = 220;
+const R = 9;
+const PAD = 2;
+
+const corners = [
+  { x: R + PAD,       y: R + PAD       },
+  { x: SQ - R - PAD, y: R + PAD       },
+  { x: SQ - R - PAD, y: SQ - R - PAD  },
+  { x: R + PAD,       y: SQ - R - PAD  },
+];
+
+const phases = [
+  { label: "Inhale",  from: 0, to: 1 },
+  { label: "Hold",    from: 1, to: 2 },
+  { label: "Exhale",  from: 2, to: 3 },
+  { label: "Hold",    from: 3, to: 0 },
+];
+
+let running = false;
+let raf;
+let phaseIdx = 0;
+let count = 0;
+let startTime = null;
+const PHASE_DUR = 4000;
+
+const dot = document.getElementById('dot');
+const phaseLabel = document.getElementById('phaseLabel');
+const countLabel = document.getElementById('countLabel');
+const progressFill = document.getElementById('progressFill');
+const toggleBtn = document.getElementById('toggleBtn');
+
+function setDot(x, y) {
+  dot.style.left = x + 'px';
+  dot.style.top  = y + 'px';
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function tick(ts) {
+  if (!running) return;
+  if (!startTime) startTime = ts;
+  const elapsed = ts - startTime;
+  const t = Math.min(elapsed / PHASE_DUR, 1);
+
+  const phase = phases[phaseIdx];
+  const from = corners[phase.from];
+  const to   = corners[phase.to];
+
+  setDot(lerp(from.x, to.x, t), lerp(from.y, to.y, t));
+
+  const newCount = Math.min(4, Math.ceil(t * 4) || 1);
+  if (newCount !== count) {
+    count = newCount;
+    countLabel.textContent = count;
+  }
+  progressFill.style.width = (t * 100) + '%';
+
+  if (t < 1) {
+    raf = requestAnimationFrame(tick);
+  } else {
+    phaseIdx = (phaseIdx + 1) % 4;
+    count = 0;
+    startTime = null;
+    phaseLabel.textContent = phases[phaseIdx].label;
+    raf = requestAnimationFrame(tick);
+  }
+}
+
+function toggleBreath() {
+  if (!running) {
+    running = true;
+    phaseIdx = 0;
+    count = 0;
+    startTime = null;
+    phaseLabel.textContent = phases[0].label;
+    countLabel.textContent = '1';
+    toggleBtn.textContent = 'Stop';
+    setDot(corners[phases[0].from].x, corners[phases[0].from].y);
+    raf = requestAnimationFrame(tick);
+  } else {
+    running = false;
+    cancelAnimationFrame(raf);
+    phaseLabel.textContent = 'Paused';
+    countLabel.textContent = '—';
+    progressFill.style.width = '0%';
+    toggleBtn.textContent = 'Start';
+    setDot(corners[0].x, corners[0].y);
+  }
+}
+
+setDot(corners[0].x, corners[0].y);
+</script>

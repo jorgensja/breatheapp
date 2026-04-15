@@ -1,0 +1,31 @@
+# 4-4-4-4 Box Breathing Tool 🌬️
+
+A minimalist, high-contrast visual aid for **Box Breathing**, designed to help ground users during anxiety or panic attacks. 
+
+## 🧠 What is Box Breathing?
+Box breathing (also known as square breathing) is a powerful stress management technique. It is used by everyone from Navy SEALs to athletes to help regulate the autonomic nervous system.
+
+**The Cycle:**
+1. **Inhale** for 4 seconds
+2. **Hold** for 4 seconds
+3. **Exhale** for 4 seconds
+4. **Hold** for 4 seconds
+
+## ✨ Features
+* **Visual Guidance:** A smooth-moving dot travels around a square, providing a clear focal point.
+* **Zero Distractions:** No ads, no complex menus, just the exercise.
+* **High Contrast:** Accessible colors and large text for ease of use during high stress.
+* **Web-Native:** Runs in any browser, no installation required.
+
+## 🚀 How to Use
+1. Open `box_breathing_4444.html` in any web browser.
+2. Press **Start**.
+3. Follow the dot and the count.
+
+## Technical Details
+* Built with vanilla **HTML5**, **CSS3**, and **JavaScript**.
+* Uses `requestAnimationFrame` for buttery-smooth animations.
+* Zero dependencies.
+
+---
+*Vibe-coded with Claude ✨🤖*
