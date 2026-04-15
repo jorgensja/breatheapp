@@ -4,12 +4,7 @@
   .phase-label { font-size: 22px; font-weight: 500; color: var(--color-text-primary); text-align: center; min-height: 2rem; }
   .count-label { font-size: 48px; font-weight: 500; color: #534AB7; text-align: center; line-height: 1; min-height: 3.5rem; }
   .scene { position: relative; width: 220px; height: 220px; }
-  .box-border {
-    position: absolute; inset: 0;
-    border: 2.5px solid #534AB7;
-    border-radius: 12px;
-    box-sizing: border-box;
-  }
+  .box-border { position: absolute; inset: 0; border: 2.5px solid #534AB7; border-radius: 12px; box-sizing: border-box; }
   .dot { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #534AB7; transform: translate(-50%, -50%); }
   .corner-label { position: absolute; font-size: 11px; color: #534AB7; font-family: var(--font-sans); font-weight: 500; }
   .progress-bar { width: 220px; height: 4px; background: #CECBF6; border-radius: 2px; overflow: hidden; }
@@ -20,8 +15,6 @@
 </style>
 
 <div class="wrap">
-  <h2 class="sr-only">Box breathing: 4-4-4-4 breathing technique for anxiety</h2>
-
   <div class="phase-label" id="phaseLabel">Press start</div>
   <div class="count-label" id="countLabel">—</div>
 
@@ -29,8 +22,8 @@
     <div class="box-border"></div>
     <span class="corner-label" style="top:6px;left:10px">↑ inhale</span>
     <span class="corner-label" style="top:6px;right:10px">hold</span>
-    <span class="corner-label" style="bottom:6px;left:10px">↓ exhale</span>
-    <span class="corner-label" style="bottom:6px;right:10px">hold</span>
+    <span class="corner-label" style="bottom:6px;left:10px">hold</span>
+    <span class="corner-label" style="bottom:6px;right:10px">↓ exhale</span>
     <div class="dot" id="dot"></div>
   </div>
 
